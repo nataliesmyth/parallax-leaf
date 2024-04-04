@@ -1,9 +1,8 @@
 // html setup
 
-let pupilsHTMLCollection = document.getElementsByClassName('pupil');
-const pupilsArray = Array.from(pupilsHTMLCollection)
-console.log('pupilsArray: ', pupilsArray)
-console.log('pupilsHTMLCollection: ', pupilsHTMLCollection)
+let itemsHTMLCollection = document.getElementsByClassName('parallax-item');
+const itemsArray = Array.from(itemsHTMLCollection)
+
 // input setup
 let input = {
     mouseX: {
@@ -21,13 +20,13 @@ let input = {
 
 let output = {
     x: {
-        start: -70,
-        end: 70,
+        start: -150,
+        end: 150,
         current: 0,
     },
     y: {
-        start: -80,
-        end: 80,
+        start: -150,
+        end: 150,
         current: 0,
     },
 }
@@ -45,20 +44,24 @@ let handleMouseMove = function (event) {
     // fractional value
     input.mouseX.fraction = (input.mouseX.current - input.mouseX.start) / input.mouseX.range;
     input.mouseY.fraction = (input.mouseY.current - input.mouseY.start) / input.mouseY.range;
+    
+    // output x
+    output.x.current = output.x.end - (input.mouseX.fraction * output.x.range)
 
-    output.x.current = output.x.start + (input.mouseX.fraction * output.x.range)
-    output.y.current = output.y.start + (input.mouseY.fraction * output.y.range)
-
-    output.x.inverse = output.x.end - (input.mouseX.fraction * output.x.range)
-    output.y.inverse = output.y.end - (input.mouseY.fraction * output.y.range)
+    // output y
+    output.y.current = output.y.end - (input.mouseY.fraction * output.y.range)
 
     // apply output to html
-    pupilsArray.forEach(function (pupil, k) {
-        if (pupilsArray.indexOf(pupil) === 0) {
-            pupil.style.transform = 'translate('+output.x.current+'px, '+output.y.current+'px)';
-        } else {
-            pupil.style.transform = 'translate('+output.x.inverse+'px, '+output.y.inverse+'px)';
+    itemsArray.forEach(function (item, k) {
+        let depth = parseFloat(item.dataset.depth, 10);
+        let itemOutput = {
+            x: output.x.current - (output.x.current * depth),
+            y: output.y.current - (output.y.current * depth),
+            zIndex: 10000 - (10000 * depth)
         }
+        console.log('depth: ', depth)
+        item.style.zIndex = itemOutput.zIndex;
+        item.style.transform = 'translate('+itemOutput.x+'px, '+itemOutput.y+'px)';
     })
 
     // console.log(output.x.current)
