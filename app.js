@@ -29,45 +29,67 @@ let output = {
         end: 150,
         current: 0,
     },
+    zIndex: {
+        range: 10000
+    },
+    scale: {
+        start: 1,
+        end: 0.3,
+    },
+    blur: {
+        startingDepth: .1,
+        range: 40,
+    }
 }
 
+output.scale.range = output.scale.end - output.scale.start;
 output.x.range = output.x.end - output.x.start;
 output.y.range = output.y.end - output.y.start;
 
 input.mouseX.range = input.mouseX.end - input.mouseX.start;
 input.mouseY.range = input.mouseY.end - input.mouseY.start;
 
-let handleMouseMove = function (event) {
-    // current mouse value
-    input.mouseX.current = event.clientX;
-    input.mouseY.current = event.clientY;
-    // fractional value
+let mouse = {
+    x: window.innerWidth * .5,
+    y: window.innerHeight * .5,
+}
+let updateInputs = function () {
+    input.mouseX.current = mouse.x;
     input.mouseX.fraction = (input.mouseX.current - input.mouseX.start) / input.mouseX.range;
+
+    input.mouseY.current = mouse.y;
     input.mouseY.fraction = (input.mouseY.current - input.mouseY.start) / input.mouseY.range;
-    
-    // output x
+}
+
+let updateOutputs = function () {
+    // output x and y
     output.x.current = output.x.end - (input.mouseX.fraction * output.x.range)
-
-    // output y
     output.y.current = output.y.end - (input.mouseY.fraction * output.y.range)
+}
 
-    // apply output to html
+let updateEachParallaxItem = function () {
     itemsArray.forEach(function (item, k) {
         let depth = parseFloat(item.dataset.depth, 10);
         let itemOutput = {
             x: output.x.current - (output.x.current * depth),
             y: output.y.current - (output.y.current * depth),
-            zIndex: 10000 - (10000 * depth)
+            zIndex: output.zIndex.range - (output.zIndex.range * depth),
+            scale: output.scale.start + (output.scale.range * depth),
+            blur: (depth - output.blur.startingDepth) * output.blur.range
         }
         console.log('depth: ', depth)
+        item.style.filter = 'blur('+itemOutput.blur+'px)'
         item.style.zIndex = itemOutput.zIndex;
-        item.style.transform = 'translate('+itemOutput.x+'px, '+itemOutput.y+'px)';
+        item.style.transform = 'scale('+itemOutput.scale+')translate('+itemOutput.x+'px, '+itemOutput.y+'px)';
     })
+}
+let handleMouseMove = function (event) {
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
 
-    // console.log(output.x.current)
-
-    // console.log('fraction X', input.mouseX.fraction)
-    // console.log('fraction Y', input.mouseY.fraction)
+    updateInputs();
+    updateOutputs();
+    updateEachParallaxItem()
 }
 let handleResize = function () {
     input.mouseX.end = window.innerWidth;
@@ -82,3 +104,7 @@ let handleResize = function () {
 // moving it to a variable (or function) outside of the event listener and referencing it makes it available outside of the addEventListener scope
 window.addEventListener('mousemove', handleMouseMove)
 window.addEventListener('resize', handleResize)
+
+    updateInputs();
+    updateOutputs();
+    updateEachParallaxItem()

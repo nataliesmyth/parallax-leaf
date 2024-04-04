@@ -4,32 +4,19 @@ body {
 }
 
 .parallax-item {
-    background-color: #000;
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-top: -100px;
+    margin-left: -150px;
+    margin-top: -150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.eye1 {
-    margin-left: -225px;
-}
-
-.eye2 {
-    margin-left: 25px;
-}
-
-.pupil {
-    background-color: black;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    position: absolute;
-    margin-left: -100px;
-    left: 50%;
-    top: 50%;
-    margin-left: -25px;
-    margin-top: -25px;
+.parallax-item img {
+    max-width: 100%;
+    max-height: 100%;
 }

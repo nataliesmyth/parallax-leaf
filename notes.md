@@ -52,3 +52,26 @@
 * The z-indexrange should correlate with or be higher than the amount of decimal places you intend to use for your depth values
 * ex: 0.4, index range should be 10
 * z-index range of 1000 or 10000 is a safe bet
+
+## Making it More Realistic
+
+### Scale
+
+* If there are two items that are the same width and height, and one is further away, it should appear smaller in scale
+* an items scale should be relative to its depth
+* We can use a scale range so to prevent our elements from appearing too small or too big
+* scaleStart = 1
+* scaleEnd = 0.5
+* scaleRange = scaleEnd - scaleStart
+* itemScale = scaleStart + (scaleRange * depth)
+
+### Blurriness
+
+* The farther away an item is, the blurrier they will appear
+* but we don't want items to get blurry until a certain depth, otherwise every element except elements at zero depth will be blurry
+* One option: decide on a starting depth value where blurriness will kick in
+* blurStartDepth = 0.5
+* The other is a blur range value, meaning how blurry an element can get
+* blurRange = 14
+* itemBlur = (depth - blurStartDepth) * blurRange
+* you may end up with negative blur values, but for nwo that means those elements will appear non-blurry
