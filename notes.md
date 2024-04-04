@@ -75,3 +75,47 @@
 * blurRange = 14
 * itemBlur = (depth - blurStartDepth) * blurRange
 * you may end up with negative blur values, but for nwo that means those elements will appear non-blurry
+
+
+## Plan Like an Amateur
+
+* When you design and code various versions of the parallax effect, there can be A LOT of moving parts
+* Planning is an essential part of the process
+
+### How to plan
+
+* Two methods of planning below
+* Both should be done at multiple different stages of a project
+
+#### Write down what you want to happen
+
+* start fairly broadly and descriptively, and then add more detail
+* ex:
+* As the user moves their mouse, the items move.
+* As the user moves their mouse from left to right, their items move from right to left.
+* As the user moves their mouse from left to right, each item moves inversely from right to left at a ratio.
+* As the user moves their mouse from left to right, each item moves inversely from right to left at a speed relative to its distance away from the user.
+* As the user moves their mouse horizontally, each item moves inversely at a speed relative to its distance away from the user.
+* Next step: break goal down into managable chucks; i.e ACTION PLAN
+* 1. track mouse X using mousemove event.
+* 2. compare mouse X to screen width to create a fraction.
+* 3. Connect that fraction to an element's X range.
+* 4. Do this for each element and apply a depth.
+* THEN do the same for each step:
+* track mouse X using mousemove event.
+    1. add event listener
+    2. create named function: handleMouseMove maybe?
+    3. Create var that stores event X inside of handleMouseMove
+* These lines can become comments in your JS, which are easy to follow
+* You can make a plan at ANY time at ANY point in the process
+* Break down what has to happen in english, then put it into code
+
+#### Put pen to paper, or pencil to ipad
+
+* draw everything you can
+* put fake values an dmake calculations
+* make calculations in js or something easy to convert into js
+* try interraction in different stages
+* once you think you know what is going to happen, replace values with variable names
+* write it down and then transfer it into code.
+* it doesn't need to be perfect, and it doesn't have to be done all at once.
