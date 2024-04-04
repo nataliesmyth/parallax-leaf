@@ -38,7 +38,7 @@ let output = {
     },
     blur: {
         startingDepth: .1,
-        range: 40,
+        range: 20,
     }
 }
 
