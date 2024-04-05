@@ -76,7 +76,6 @@
 * itemBlur = (depth - blurStartDepth) * blurRange
 * you may end up with negative blur values, but for nwo that means those elements will appear non-blurry
 
-
 ## Plan Like an Amateur
 
 * When you design and code various versions of the parallax effect, there can be A LOT of moving parts
@@ -119,3 +118,16 @@
 * once you think you know what is going to happen, replace values with variable names
 * write it down and then transfer it into code.
 * it doesn't need to be perfect, and it doesn't have to be done all at once.
+
+## Scrolling Parallax Effect
+
+### What we want to achieve
+
+1. Create scrollY input fraction value that I can connect my output values to
+2. We then want each of my elements to move in the opposite direction to the scroll direction but proportional to their depth
+    * the FURTHER AWAY an element is the QUICKER it will be moving in the opposite direction to the scroll direction
+    * the maximum we can scrole is the document height minus the window height
+
+### Unique Input Values for Each Element
+
+* output.y.current = output.y.end - (input.scrollY.fraction * output.y.range)

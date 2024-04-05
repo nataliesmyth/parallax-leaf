@@ -1,10 +1,16 @@
 // html setup
 
 let itemsHTMLCollection = document.getElementsByClassName('parallax-item');
-const itemsArray = Array.from(itemsHTMLCollection)
+const itemsArray = Array.from(itemsHTMLCollection);
+let html = document.documentElement;
 
 // input setup
 let input = {
+    scrollY: {
+        start: 0,
+        end: html.scrollHeight - window.innerHeight,
+        current: 0,
+    },
     mouseX: {
         start: 0,
         end: window.innerWidth,
@@ -14,9 +20,12 @@ let input = {
         start: 0,
         end: window.innerHeight,
         current: 0,
-    }
+    },
 };
 
+input.scrollY.range = input.scrollY.end - input.scrollY.start;
+input.mouseX.range = input.mouseX.end - input.mouseX.start;
+input.mouseY.range = input.mouseY.end - input.mouseY.start;
 
 let output = {
     x: {
@@ -46,25 +55,29 @@ output.scale.range = output.scale.end - output.scale.start;
 output.x.range = output.x.end - output.x.start;
 output.y.range = output.y.end - output.y.start;
 
-input.mouseX.range = input.mouseX.end - input.mouseX.start;
-input.mouseY.range = input.mouseY.end - input.mouseY.start;
-
 let mouse = {
     x: window.innerWidth * .5,
     y: window.innerHeight * .5,
 }
 let updateInputs = function () {
+    // mouse x input
     input.mouseX.current = mouse.x;
     input.mouseX.fraction = (input.mouseX.current - input.mouseX.start) / input.mouseX.range;
 
+    // mouse y input
     input.mouseY.current = mouse.y;
     input.mouseY.fraction = (input.mouseY.current - input.mouseY.start) / input.mouseY.range;
+
+    // scroll y input
+    input.scrollY.current = html.scrollTop;
+    input.scrollY.fraction = (input.scrollY.current - input.scrollY.start) / input.scrollY.range;
 }
 
 let updateOutputs = function () {
     // output x and y
-    output.x.current = output.x.end - (input.mouseX.fraction * output.x.range)
-    output.y.current = output.y.end - (input.mouseY.fraction * output.y.range)
+    // output.x.current = output.x.end - (input.mouseX.fraction * output.x.range)
+    // output.y.current = output.y.end - (input.mouseY.fraction * output.y.range)
+    output.y.current = output.y.start + (input.scrollY.fraction * output.y.range)
 }
 
 let updateEachParallaxItem = function () {
@@ -89,22 +102,32 @@ let handleMouseMove = function (event) {
 
     updateInputs();
     updateOutputs();
-    updateEachParallaxItem()
+    updateEachParallaxItem();
 }
+
+let handleScroll = function () {
+    updateInputs();
+    updateOutputs();
+    updateEachParallaxItem();
+}
+
 let handleResize = function () {
     input.mouseX.end = window.innerWidth;
     input.mouseX.range = input.mouseX.end - input.mouseX.start;
+
     input.mouseY.end = window.innerWidth;
     input.mouseY.range = input.mouseX.end - input.mouseY.start;
+
+    input.scrollY.end = html.scrollHeight - window.innerHeight;
+    input.scrollY.range = input.scrollY.end - input.scrollY.start;
 }
-
-
 
 // function inside event listener is ANONYMOUS, meaning it is not accessible outside of the event listener.
 // moving it to a variable (or function) outside of the event listener and referencing it makes it available outside of the addEventListener scope
-window.addEventListener('mousemove', handleMouseMove)
+// window.addEventListener('mousemove', handleMouseMove)
+document.addEventListener('scroll', handleScroll)
 window.addEventListener('resize', handleResize)
 
     updateInputs();
     updateOutputs();
-    updateEachParallaxItem()
+    updateEachParallaxItem();

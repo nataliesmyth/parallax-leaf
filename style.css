@@ -3,6 +3,15 @@ body {
     margin: 0;
 }
 
+.parallax-container {
+    min-height: 100vh;
+    position: relative;
+}
+
+.parallax-container.alt {
+    background-color: #FFCDD2;
+}
+
 .parallax-item {
     width: 300px;
     height: 300px;
