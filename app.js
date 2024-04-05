@@ -34,8 +34,8 @@ let output = {
         current: 0,
     },
     y: {
-        start: -150,
-        end: 150,
+        start: 0,
+        end: 500,
         current: 0,
     },
     zIndex: {
@@ -47,7 +47,7 @@ let output = {
     },
     blur: {
         startingDepth: .1,
-        range: 20,
+        range: 40,
     }
 }
 
@@ -71,6 +71,7 @@ let updateInputs = function () {
     // scroll y input
     input.scrollY.current = html.scrollTop;
     input.scrollY.fraction = (input.scrollY.current - input.scrollY.start) / input.scrollY.range;
+    console.log('scroll', input.scrollY.current)
 }
 
 let updateOutputs = function () {
@@ -81,16 +82,33 @@ let updateOutputs = function () {
 }
 
 let updateEachParallaxItem = function () {
+    // apply output to html
     itemsArray.forEach(function (item, k) {
         let depth = parseFloat(item.dataset.depth, 10);
+
+        let itemInput = {
+            scrollY: {
+                start: item.offsetParent.offsetTop,
+                end: item.offsetParent.offsetTop + window.innerHeight,
+            }
+        }
+        // allows us to specify a start and end for each element
+        // input is the GLOBAL input
+        itemInput.scrollY.range = itemInput.scrollY.end - itemInput.scrollY.start;
+        itemInput.scrollY.fraction = (input.scrollY.current - itemInput.scrollY.start) / itemInput.scrollY.range;
+
+        // not using an object bc we only need one value
+        let itemOutputYCurrent = output.y.start + (itemInput.scrollY.fraction * output.y.range)
+
+
         let itemOutput = {
             x: output.x.current - (output.x.current * depth),
-            y: output.y.current - (output.y.current * depth),
+            y: itemOutputYCurrent * depth,
             zIndex: output.zIndex.range - (output.zIndex.range * depth),
             scale: output.scale.start + (output.scale.range * depth),
             blur: (depth - output.blur.startingDepth) * output.blur.range
         }
-        console.log('depth: ', depth)
+        console.log(k, 'fraction: ', itemInput.scrollY.fraction)
         item.style.filter = 'blur('+itemOutput.blur+'px)'
         item.style.zIndex = itemOutput.zIndex;
         item.style.transform = 'scale('+itemOutput.scale+')translate('+itemOutput.x+'px, '+itemOutput.y+'px)';

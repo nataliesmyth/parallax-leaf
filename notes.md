@@ -131,3 +131,6 @@
 ### Unique Input Values for Each Element
 
 * output.y.current = output.y.end - (input.scrollY.fraction * output.y.range)
+* this says we should start at the end and as the fraction value increases, we'll get closer and closer to the start value
+* instead, we want to start with the start value, and as the fraction value increases, lets get closer and closer to the end value:
+* output.y.current = output.y.start + (input.scrollY.fraction * output.y.range)
