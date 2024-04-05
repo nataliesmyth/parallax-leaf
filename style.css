@@ -6,6 +6,8 @@ body {
 .parallax-container {
     min-height: 100vh;
     position: relative;
+    /* prevent parallax elements from going into other elements space */
+    overflow: hidden;
 }
 
 .parallax-container.alt {
